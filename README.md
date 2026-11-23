@@ -50,6 +50,7 @@ If you are developing a production application, we recommend using TypeScript wi
 --- Jeg har installeret react icons for at gøre det nemere at hente og bruge iconer til for eksempel til "Details"
 --- Jeg har installeret tanstack. Det er en bedre måde at fetche data på og at se data'en
 --- Jeg har installeret react router for at gøre det nemere at skifte side og have et godt over alle siderne
+--- Jeg har installeret sass istedet for css fordi for mig er det nemmere og mere overskugelit 
 
 ### Argumentation for de valg du selvstændigt har truffet under løsningen af opgaven
 

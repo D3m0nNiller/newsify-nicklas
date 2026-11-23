@@ -1,0 +1,72 @@
+$login__: ".login__";
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+body {
+    height: 100vh;
+}
+
+#{$login__} {
+    height: 100vh;
+    text-align: center;
+    display: grid;
+
+    #{$login__}imageBox {
+        margin: 1.3em 0;
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+
+    #{$login__}paragraph {
+        margin: 2em 0;
+    }
+
+    #{$login__}loginOptions {
+        display: flex;
+        flex-direction: column;
+        margin: 2em;
+        gap: 20px;
+
+        #{$login__}facebookLogin,
+        #{$login__}googleLogin {
+            background-color: unset;
+            border-radius: 2em;
+            border: 1px solid;
+            padding: 1em 2em;
+        }
+    }
+
+    #{$login__}alternativeLogin {
+        display: flex;
+        flex-direction: column;
+        margin: 2em;
+
+        #{$login__}passwordLogin {
+            display: flex;
+            background-color: #4D861F;
+            border-radius: 2em;
+            border: none;
+            padding: 1em 2em;
+            color: #fff;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+    }
+
+    #{$login__}signUp {
+
+        #{$login__}signUpButton {
+            color: #4D861F;
+            text-decoration: none;
+        }
+    }
+}
