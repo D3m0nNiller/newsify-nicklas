@@ -15,6 +15,8 @@ body {
     height: 100vh;
     text-align: center;
     display: grid;
+    font-family: 'Open Sans', sans-serif;
+    color: #404040;
 
     #{$login__}imageBox {
         margin: 1.3em 0;
@@ -23,6 +25,12 @@ body {
             max-width: 100%;
             height: auto;
         }
+    }
+
+    #{$login__}header {
+        font-family: "Playfair Display", 'Open Sans', sans-serif;
+        font-size: 38px;
+
     }
 
     #{$login__}paragraph {
@@ -39,8 +47,9 @@ body {
         #{$login__}googleLogin {
             background-color: unset;
             border-radius: 2em;
-            border: 1px solid;
+            border: 1px solid #C5C5C5;
             padding: 1em 2em;
+            color: #404040;
         }
     }
 
