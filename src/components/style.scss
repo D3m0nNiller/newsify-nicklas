@@ -84,25 +84,33 @@ body {
 
 #{$news__} {
     height: 100vh;
-    display: grid;
+    display: flex;
+    margin-top: 10px;
+    gap: 3em;
+    flex-direction: column;
+    font-family: 'Open Sans', sans-serif;
 
     #{$news__}details {
-        grid-column: 1/-1;
-        margin-left: 10px;
+
+        border-top: 1px solid;
+        padding-top: 10px;
 
         #{$news__}summary {
             background: url(../../public/newsify_logo.svg) no-repeat;
             background-size: contain;
             list-style: none;
-            padding-left: 30px;
+            padding-left: 40px;
             display: grid;
             grid-auto-flow: column;
-            height: 7vh;
+            margin-left: 15px;
+
+            #{$news__}catagory {
+                font-family: "Playfair Display", 'Open Sans', sans-serif;
+            }
 
             #{$news__}summaryArrow {
                 margin-left: auto;
                 margin-right: 15px;
-                height: inherit;
                 transform: rotate(0deg);
                 transition: transform 0.3s ease-in-out;
                 display: block;
@@ -111,6 +119,38 @@ body {
 
         &[open] #{$news__}summaryArrow {
             transform: rotate(90deg);
+        }
+    }
+
+    #{$news__}article:first-of-type {
+        margin-top: 5%;
+        border-top: 1px solid;
+    }
+
+    #{$news__}article {
+        display: flex;
+        width: 100%;
+        border-top: 1px solid black;
+        padding: 0.7em;
+        padding-left: 15px;
+
+        #{$news__}articleImgBox {
+            margin-right: 0.7em;
+        }
+
+        #{$news__}articleTextWrapper {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #{$news__}articleHeader {
+            font-family: "Playfair Display", 'Open Sans', sans-serif;
+        }
+
+        #{$news__}articleText {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

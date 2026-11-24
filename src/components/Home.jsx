@@ -64,14 +64,19 @@ export default function Home() {
                 >
 
                     <summary className="news__summary">
-                        <h1 className="news__summaryHeader">{category.category}</h1>
+                        <h1 className="news__catagory">{category.category}</h1>
                         <FaChevronRight className="news__summaryArrow" />
                     </summary>
 
                     {category.articles?.map((article) => (
                         <article key={article._id} className="news__article">
-                            <h2 className="news__articleHeader">{article.headline.main}</h2>
-                            <p className="news__articleText">{article.abstract}</p>
+                            <div className="news__articleImgBox">
+                                <img src={article.multimedia.thumbnail.url} alt={article.multimedia.credit} />
+                            </div>
+                            <div className="news__articleTextWrapper">
+                                <h3 className="news__articleHeader">{article.headline.main}</h3>
+                                <p className="news__articleText">{article.abstract}</p>
+                            </div>
                         </article>
                     ))}
 
