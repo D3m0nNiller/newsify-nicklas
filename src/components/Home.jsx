@@ -1,4 +1,5 @@
 
+import { FaChevronRight } from "react-icons/fa"
 import "./style.scss"
 import { useQuery } from "@tanstack/react-query"
 
@@ -64,6 +65,7 @@ export default function Home() {
 
                     <summary className="news__summary">
                         {category.category}
+                        <FaChevronRight className="news__arrow" />
                     </summary>
 
                     {category.articles?.map((article) => (

@@ -5,7 +5,6 @@ $news__: ".news__";
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-
 }
 
 body {
@@ -79,6 +78,29 @@ body {
         #{$login__}signUpButton {
             color: #4D861F;
             text-decoration: none;
+        }
+    }
+}
+
+#{$news__} {
+    height: 100vh;
+    display: grid;
+
+    #{$news__}details {
+        grid-column: 1/-1;
+    }
+
+    #{$news__}summary {
+        background: url(../../public/newsify_logo.svg) no-repeat;
+        background-size: contain;
+        list-style: none;
+        padding-left: 20px;
+        display: grid;
+        grid-auto-flow: column;
+
+        #{$news__}arrow {
+            margin-left: auto;
+            margin-right: 15px;
         }
     }
 }
