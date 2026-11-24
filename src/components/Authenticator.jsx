@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import "./style.scss"
 
 export default function Authenticator() {
@@ -16,7 +17,7 @@ export default function Authenticator() {
             <div className="login__alternativeLogin">
                 <button type="button" className="login__passwordLogin">Sign in with password</button>
             </div>
-            <p className="login__signUp">Dont have an account? <a href="#" className="login__signUpButton">Sign up</a></p>
+            <p className="login__signUp">Dont have an account? <Link to="/signup" className="login__signUpButton">Sign up</Link></p>
         </section>
     )
 }

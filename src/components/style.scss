@@ -1,4 +1,5 @@
 $login__: ".login__";
+$news__: ".news__";
 
 * {
     padding: 0;
@@ -19,7 +20,7 @@ body {
     color: #404040;
 
     #{$login__}imageBox {
-        margin: 1.3em 0;
+        margin-top: 1.3em;
 
         img {
             max-width: 100%;
@@ -34,13 +35,13 @@ body {
     }
 
     #{$login__}paragraph {
-        margin: 2em 0;
+        margin: 1em 0;
     }
 
     #{$login__}loginOptions {
         display: flex;
         flex-direction: column;
-        margin: 2em;
+        margin: 0 1em;
         gap: 20px;
 
         #{$login__}facebookLogin,
@@ -50,13 +51,14 @@ body {
             border: 1px solid #C5C5C5;
             padding: 1em 2em;
             color: #404040;
+            font-size: 16px;
         }
     }
 
     #{$login__}alternativeLogin {
         display: flex;
         flex-direction: column;
-        margin: 2em;
+        margin: 0 2em;
 
         #{$login__}passwordLogin {
             display: flex;
@@ -68,6 +70,7 @@ body {
             justify-content: center;
             align-items: center;
             text-align: center;
+            font-size: 16px;
         }
     }
 
