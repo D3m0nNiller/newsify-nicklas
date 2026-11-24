@@ -88,19 +88,29 @@ body {
 
     #{$news__}details {
         grid-column: 1/-1;
-    }
+        margin-left: 10px;
 
-    #{$news__}summary {
-        background: url(../../public/newsify_logo.svg) no-repeat;
-        background-size: contain;
-        list-style: none;
-        padding-left: 20px;
-        display: grid;
-        grid-auto-flow: column;
+        #{$news__}summary {
+            background: url(../../public/newsify_logo.svg) no-repeat;
+            background-size: contain;
+            list-style: none;
+            padding-left: 30px;
+            display: grid;
+            grid-auto-flow: column;
+            height: 7vh;
 
-        #{$news__}arrow {
-            margin-left: auto;
-            margin-right: 15px;
+            #{$news__}summaryArrow {
+                margin-left: auto;
+                margin-right: 15px;
+                height: inherit;
+                transform: rotate(0deg);
+                transition: transform 0.3s ease-in-out;
+                display: block;
+            }
+        }
+
+        &[open] #{$news__}summaryArrow {
+            transform: rotate(90deg);
         }
     }
 }
