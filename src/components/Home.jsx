@@ -1,9 +1,13 @@
-
+import { useRef, useState } from "react"
 import { FaChevronRight } from "react-icons/fa"
 import "./style.scss"
 import { useQuery } from "@tanstack/react-query"
 
 export default function Home() {
+
+    const [openCategories, setOpenCategories] = useState([])
+    const [closingCategories, setClosingCategories] = useState([])
+    const animationLock = useRef([])
 
     const API_key = import.meta.env.VITE_API_KEY
 
@@ -47,41 +51,104 @@ export default function Home() {
     })
 
     if (isLoading) {
-        return <p>Loading...</p>
+        return <p>Loading weather data...</p>
     }
 
     if (error) {
-        return <p>{error.message}</p>
+        return <p>Something wrong happened while fetching, maybe something is wrong with your internet or while fetching the data</p>
+    }
+
+    function toggleCategory(category) {
+        // Prevent multiple clicks during an animation
+        if (animationLock.current.includes(category)) return
+
+        // Lock this category immediately
+        animationLock.current.push(category)
+
+        const isOpen = openCategories.includes(category)
+
+        if (isOpen) {
+            setClosingCategories(prev => [...prev, category])
+        } else {
+            setOpenCategories(prev => [...prev, category])
+        }
+    }
+
+    function handleTransitionEnd(e, category) {
+        // Only react to the grid-template-rows transition
+        if (e.propertyName !== "grid-template-rows") return
+
+        // Check if this category is closing
+        if (closingCategories.includes(category)) {
+            setOpenCategories(prev =>
+                prev.filter(item => item !== category)
+            )
+
+            setClosingCategories(prev =>
+                prev.filter(item => item !== category)
+            )
+        }
+
+        // Unlock the category
+        animationLock.current =
+            animationLock.current.filter(item => item !== category)
     }
 
     return (
         <section className="news__">
 
-            {data && data.map((category) => (
-                <details
-                    className="news__details"
-                    key={category.category}
-                >
+            {data && data.map((category) => {
+                const isOpen = openCategories.includes(category.category)
+                const isClosing = closingCategories.includes(category.category)
 
-                    <summary className="news__summary">
-                        <h1 className="news__catagory">{category.category}</h1>
-                        <FaChevronRight className="news__summaryArrow" />
-                    </summary>
+                return (
+                    <details
+                        className="news__details"
+                        key={category.category}
+                        open={isOpen}
+                    >
 
-                    {category.articles?.map((article) => (
-                        <article key={article._id} className="news__article">
-                            <div className="news__articleImgBox">
-                                <img src={article.multimedia.thumbnail.url} alt={article.multimedia.credit} />
+                        <summary
+                            className="news__summary"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                toggleCategory(category.category)
+                            }}
+                        >
+                            <h1 className="news__catagory">{category.category}</h1>
+                            <FaChevronRight className="news__summaryArrow" />
+                        </summary>
+
+                        <div
+                            className={`news__articles ${isOpen ? "open" : ""} ${isClosing ? "closing" : ""}`}
+                            onTransitionEnd={(e) => handleTransitionEnd(e, category.category)}
+                        >
+                            <div>
+                                {category.articles?.map((article) => (
+                                    <article key={article._id} className="news__article">
+                                        <div className="news__articleImgBox">
+                                            <img
+                                                src={article.multimedia?.thumbnail?.url}
+                                                alt={article.multimedia?.credit || ""}
+                                            />
+                                        </div>
+
+                                        <div className="news__articleTextWrapper">
+                                            <h3 className="news__articleHeader">
+                                                {article.headline.main}
+                                            </h3>
+                                            <p className="news__articleText">
+                                                {article.abstract}
+                                            </p>
+                                        </div>
+                                    </article>
+                                ))}
                             </div>
-                            <div className="news__articleTextWrapper">
-                                <h3 className="news__articleHeader">{article.headline.main}</h3>
-                                <p className="news__articleText">{article.abstract}</p>
-                            </div>
-                        </article>
-                    ))}
+                        </div>
 
-                </details>
-            ))}
+                    </details>
+                )
+            })}
 
         </section>
     )

@@ -11,6 +11,8 @@ body {
     height: 100vh;
 }
 
+// LOGIN PART ----------------------------------------------------------------------------------------------------
+
 #{$login__} {
     height: 100vh;
     text-align: center;
@@ -82,11 +84,13 @@ body {
     }
 }
 
+// NEWS PART ----------------------------------------------------------------------------------------
+
 #{$news__} {
     height: 100vh;
     display: flex;
     margin-top: 10px;
-    gap: 3em;
+    gap: 1em;
     flex-direction: column;
     font-family: 'Open Sans', sans-serif;
 
@@ -109,8 +113,7 @@ body {
             }
 
             #{$news__}summaryArrow {
-                margin-left: auto;
-                margin-right: 15px;
+                margin: auto 15px auto auto;
                 transform: rotate(0deg);
                 transition: transform 0.3s ease-in-out;
                 display: block;
@@ -122,9 +125,37 @@ body {
         }
     }
 
+    #{$news__}details:last-of-type {
+        border-bottom: 1px solid;
+        padding-bottom: 10px;
+    }
+
+    #{$news__}details:last-of-type #{$news__}article:last-of-type {
+        border-bottom: 1px solid;
+    }
+
     #{$news__}article:first-of-type {
-        margin-top: 5%;
+        margin-top: 2%;
         border-top: 1px solid;
+    }
+
+    #{$news__}articles {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s ease;
+
+        >div {
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        &.open {
+            grid-template-rows: 1fr;
+        }
+
+        &.closing {
+            grid-template-rows: 0fr;
+        }
     }
 
     #{$news__}article {
@@ -141,16 +172,16 @@ body {
         #{$news__}articleTextWrapper {
             flex: 1;
             min-width: 0;
-        }
 
-        #{$news__}articleHeader {
-            font-family: "Playfair Display", 'Open Sans', sans-serif;
-        }
+            #{$news__}articleHeader {
+                font-family: "Playfair Display", 'Open Sans', sans-serif;
+            }
 
-        #{$news__}articleText {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            #{$news__}articleText {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
         }
     }
 }
