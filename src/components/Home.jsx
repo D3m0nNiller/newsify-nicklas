@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { FaChevronRight, FaCheck, FaTrash } from "react-icons/fa"
 import "./style.scss"
 import { useQuery } from "@tanstack/react-query"
+import Links from "./Links"
 
 export default function Home() {
 
@@ -68,7 +69,7 @@ export default function Home() {
     }
 
     if (error) {
-        return <p>Something wrong happened while fetching, maybe something is wrong with your internet or while fetching the data</p>
+        return <p>Something wrong happened while fetching. Maybe something is wrong with your internet or while fetching the data</p>
     }
 
     function toggleSavedArticle(article) {
@@ -97,6 +98,24 @@ export default function Home() {
         if (isOpen) {
             setClosingCategories(prev => [...prev, category])
         } else {
+            // Find other categories that are currently open
+            const otherOpenCategories = openCategories.filter(
+                item => item !== category
+            )
+
+            // Lock the other categories while they close
+            otherOpenCategories.forEach(item => {
+                if (!animationLock.current.includes(item)) {
+                    animationLock.current.push(item)
+                }
+            })
+
+            // Start closing the other categories
+            setClosingCategories(prev => [
+                ...new Set([...prev, ...otherOpenCategories])
+            ])
+
+            // Open the selected category
             setOpenCategories(prev => [...prev, category])
         }
     }
@@ -142,89 +161,97 @@ export default function Home() {
     }
 
     return (
-        <section className="news__">
+        <>
+            <section className="news__">
 
-            {data && data.map((category) => {
-                const isOpen = openCategories.includes(category.category)
-                const isClosing = closingCategories.includes(category.category)
+                <h1 className="news__header">Newfisy</h1>
 
-                return (
-                    <details
-                        className="news__details"
-                        key={category.category}
-                        open={isOpen}
-                    >
+                <input type="search" name="newsSearch" id="newsSearch" className="news__search" placeholder="Search news" />
 
-                        <summary
-                            className="news__summary"
-                            onClick={(e) => {
-                                e.preventDefault()
-                                toggleCategory(category.category)
-                            }}
+                {data && data.map((category) => {
+                    const isOpen = openCategories.includes(category.category)
+                    const isClosing = closingCategories.includes(category.category)
+
+                    return (
+                        <details
+                            className="news__details"
+                            key={category.category}
+                            open={isOpen}
                         >
-                            <h1 className="news__catagory">{category.category}</h1>
-                            <FaChevronRight className="news__summaryArrow" />
-                        </summary>
 
-                        <div
-                            className={`news__articles ${isOpen ? "open" : ""} ${isClosing ? "closing" : ""}`}
-                            onTransitionEnd={(e) => handleTransitionEnd(e, category.category)}
-                        >
-                            <div>
-                                {category.articles?.map((article) => (
-                                    <div className="news__articleWrapper" key={article._id}>
+                            <summary
+                                className="news__summary"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    toggleCategory(category.category)
+                                }}
+                            >
+                                <h1 className="news__catagory">{category.category}</h1>
+                                <FaChevronRight className="news__summaryArrow" />
+                            </summary>
 
-                                        <button
-                                            className={`news__saveButton ${savedArticles.some(saved => saved._id === article._id)
-                                                ? "saved"
-                                                : ""
-                                                }`}
-                                            onClick={() => toggleSavedArticle(article)}
-                                            aria-label={
-                                                savedArticles.some(saved => saved._id === article._id)
-                                                    ? "Remove saved article"
-                                                    : "Save article"
-                                            }
-                                        >
-                                            {savedArticles.some(saved => saved._id === article._id)
-                                                ? <FaTrash />
-                                                : <FaCheck />
-                                            }
-                                        </button>
+                            <div
+                                className={`news__articles ${isOpen ? "open" : ""} ${isClosing ? "closing" : ""}`}
+                                onTransitionEnd={(e) => handleTransitionEnd(e, category.category)}
+                            >
+                                <div>
+                                    {category.articles?.map((article) => (
+                                        <div className="news__articleWrapper" key={article._id}>
 
-                                        <article
-                                            className={`news__article ${swipedArticle === article._id ? "swiped" : ""
-                                                }`}
-                                            onTouchStart={(e) => handleTouchStart(e, article._id)}
-                                            onTouchEnd={(e) => handleTouchEnd(e, article._id)}
-                                        >
-                                            <div className="news__articleImgBox">
-                                                <img
-                                                    src={article.multimedia?.thumbnail?.url}
-                                                    alt={article.multimedia?.credit || ""}
-                                                />
-                                            </div>
+                                            <button
+                                                className={`news__saveButton ${savedArticles.some(saved => saved._id === article._id)
+                                                    ? "saved"
+                                                    : ""
+                                                    }`}
+                                                onClick={() => toggleSavedArticle(article)}
+                                                aria-label={
+                                                    savedArticles.some(saved => saved._id === article._id)
+                                                        ? "Remove saved article"
+                                                        : "Save article"
+                                                }
+                                            >
+                                                {savedArticles.some(saved => saved._id === article._id)
+                                                    ? <FaTrash />
+                                                    : <FaCheck />
+                                                }
+                                            </button>
 
-                                            <div className="news__articleTextWrapper">
-                                                <h3 className="news__articleHeader">
-                                                    {article.headline.main}
-                                                </h3>
+                                            <article
+                                                className={`news__article ${swipedArticle === article._id ? "swiped" : ""
+                                                    }`}
+                                                onTouchStart={(e) => handleTouchStart(e, article._id)}
+                                                onTouchEnd={(e) => handleTouchEnd(e, article._id)}
+                                            >
+                                                <div className="news__articleImgBox">
+                                                    <img
+                                                        src={article.multimedia?.thumbnail?.url}
+                                                        alt={article.multimedia?.credit || ""}
+                                                    />
+                                                </div>
 
-                                                <p className="news__articleText">
-                                                    {article.abstract}
-                                                </p>
-                                            </div>
-                                        </article>
+                                                <div className="news__articleTextWrapper">
+                                                    <h3 className="news__articleHeader">
+                                                        {article.headline.main}
+                                                    </h3>
 
-                                    </div>
-                                ))}
+                                                    <p className="news__articleText">
+                                                        {article.abstract}
+                                                    </p>
+                                                </div>
+                                            </article>
+
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
-                    </details>
-                )
-            })}
+                        </details>
+                    )
+                })}
 
-        </section>
+            </section>
+
+            <Links />
+        </>
     )
 }

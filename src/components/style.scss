@@ -1,5 +1,6 @@
 $login__: ".login__";
 $news__: ".news__";
+$links__: ".links__";
 
 * {
     padding: 0;
@@ -93,6 +94,23 @@ body {
     gap: 1em;
     flex-direction: column;
     font-family: 'Open Sans', sans-serif;
+
+    #{$news__}header {
+        background: url(../../public/newsify_logo.svg) no-repeat;
+        background-size: contain;
+        margin: 0 auto;
+        padding-left: 45px;
+        font-family: "Playfair Display", 'Open Sans', sans-serif;
+    }
+
+    #{$news__}search {
+        margin: 0 30px;
+        border: none;
+        background-color: #CCC;
+        padding: 15px;
+        border-radius: 5px;
+        opacity: 0.4;
+    }
 
     #{$news__}details {
 
@@ -211,7 +229,6 @@ body {
             width: 100%;
             padding: 0.7em;
             padding-left: 15px;
-            height: max-content;
 
             background: white;
             border: none;
@@ -241,6 +258,28 @@ body {
                     text-overflow: ellipsis;
                 }
             }
+        }
+    }
+}
+
+#{$links__} {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.3em;
+
+    #{$links__}icon {
+        display: grid;
+
+        #{$links__}home,
+        #{$links__}bookMark,
+        #{$links__}popular,
+        #{$links__}settings {
+            place-self: center;
         }
     }
 }
