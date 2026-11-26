@@ -7,6 +7,7 @@ export default function Home() {
 
     const [openCategories, setOpenCategories] = useState([])
     const [closingCategories, setClosingCategories] = useState([])
+    const [swipedArticle, setSwipedArticle] = useState(null)
     const animationLock = useRef([])
 
     const [savedArticles, setSavedArticles] = useState(() => {
@@ -63,7 +64,7 @@ export default function Home() {
     })
 
     if (isLoading) {
-        return <p>Loading weather data...</p>
+        return <p>Loading news...</p>
     }
 
     if (error) {
@@ -120,6 +121,26 @@ export default function Home() {
             animationLock.current.filter(item => item !== category)
     }
 
+    function handleTouchStart(e, articleId) {
+        const touch = e.touches[0]
+
+        e.currentTarget.dataset.startX = touch.clientX
+        e.currentTarget.dataset.articleId = articleId
+    }
+
+    function handleTouchEnd(e, articleId) {
+        const startX = Number(e.currentTarget.dataset.startX)
+        const endX = e.changedTouches[0].clientX
+
+        const difference = startX - endX
+
+        if (difference > 50) {
+            setSwipedArticle(articleId)
+        } else if (difference < -50) {
+            setSwipedArticle(null)
+        }
+    }
+
     return (
         <section className="news__">
 
@@ -151,37 +172,51 @@ export default function Home() {
                         >
                             <div>
                                 {category.articles?.map((article) => (
-                                    <article key={article._id} className="news__article">
-                                        <div className="news__articleImgBox">
-                                            <img
-                                                src={article.multimedia?.thumbnail?.url}
-                                                alt={article.multimedia?.credit || ""}
-                                            />
-                                        </div>
-
-                                        <div className="news__articleTextWrapper">
-                                            <h3 className="news__articleHeader">{article.headline.main}</h3>
-                                            <p className="news__articleText">{article.abstract}</p>
-                                        </div>
+                                    <div className="news__articleWrapper" key={article._id}>
 
                                         <button
-                                            className={`news__saveButton ${savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                            className={`news__saveButton ${savedArticles.some(saved => saved._id === article._id)
                                                 ? "saved"
                                                 : ""
                                                 }`}
                                             onClick={() => toggleSavedArticle(article)}
                                             aria-label={
-                                                savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                                savedArticles.some(saved => saved._id === article._id)
                                                     ? "Remove saved article"
                                                     : "Save article"
                                             }
                                         >
-                                            {savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                            {savedArticles.some(saved => saved._id === article._id)
                                                 ? <FaTrash />
                                                 : <FaCheck />
                                             }
                                         </button>
-                                    </article>
+
+                                        <article
+                                            className={`news__article ${swipedArticle === article._id ? "swiped" : ""
+                                                }`}
+                                            onTouchStart={(e) => handleTouchStart(e, article._id)}
+                                            onTouchEnd={(e) => handleTouchEnd(e, article._id)}
+                                        >
+                                            <div className="news__articleImgBox">
+                                                <img
+                                                    src={article.multimedia?.thumbnail?.url}
+                                                    alt={article.multimedia?.credit || ""}
+                                                />
+                                            </div>
+
+                                            <div className="news__articleTextWrapper">
+                                                <h3 className="news__articleHeader">
+                                                    {article.headline.main}
+                                                </h3>
+
+                                                <p className="news__articleText">
+                                                    {article.abstract}
+                                                </p>
+                                            </div>
+                                        </article>
+
+                                    </div>
                                 ))}
                             </div>
                         </div>
