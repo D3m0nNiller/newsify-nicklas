@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react"
-import { FaChevronRight, FaCheck, FaTrash } from "react-icons/fa"
+import { FaChevronRight, FaTrash, FaBookmark } from "react-icons/fa"
 import "./style.scss"
 import { useQuery } from "@tanstack/react-query"
 import Links from "./Links"
@@ -25,11 +25,12 @@ export default function Home() {
         localStorage.setItem("savedArticles", JSON.stringify(savedArticles))
     }, [savedArticles])
 
+
     async function newsFetch() {
 
         const categories = ["Editorial", "Games", "Express", "Podcasts", "Sports", "Climate"]
 
-        const news = await Promise.all(
+        const news = await Promise.allSettled(
             categories.map(async (category) => {
 
                 const params = new URLSearchParams({
@@ -42,7 +43,7 @@ export default function Home() {
                 )
 
                 if (!response.ok) {
-                    throw new Error("Failed to fetch news")
+                    throw new Error(`Failed to fetch ${category}`)
                 }
 
                 const data = await response.json()
@@ -54,8 +55,23 @@ export default function Home() {
             })
         )
 
-        return news
+        return news.map((result, index) => {
+            if (result.status === "fulfilled") {
+                return result.value
+            }
+
+            console.error(
+                `Failed to fetch ${categories[index]}:`,
+                result.reason
+            )
+
+            return {
+                category: categories[index],
+                articles: []
+            }
+        })
     }
+
 
     const { data, isLoading, error } = useQuery({
         queryKey: ["News"],
@@ -215,7 +231,7 @@ export default function Home() {
                                             >
                                                 {savedArticles.some(saved => saved._id === article._id)
                                                     ? <FaTrash />
-                                                    : <FaCheck />
+                                                    : <FaBookmark />
                                                 }
                                             </button>
 
