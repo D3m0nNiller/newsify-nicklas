@@ -2,6 +2,7 @@
 import { useState, useRef } from "react"
 import { FaChevronRight, FaTrash } from "react-icons/fa"
 import "./style.scss"
+import Links from "./Links"
 
 export default function Archive() {
 
@@ -127,94 +128,97 @@ export default function Archive() {
     }
 
     return (
-        <section className="archive__">
+        <>
+            <section className="archive__">
 
-            <h1 className="archive__header">Archive</h1>
+                <h1 className="archive__header">Newsify</h1>
 
-            {savedArticles.length === 0 ? (
-                <p className="archive__empty">
-                    You haven't saved any articles yet.
-                </p>
-            ) : (
-                groupedArticles.map(category => {
+                {savedArticles.length === 0 ? (
+                    <p className="archive__empty">
+                        You haven't saved any articles yet.
+                    </p>
+                ) : (
+                    groupedArticles.map(category => {
 
-                    const isOpen = openCategories.includes(category.category)
-                    const isClosing = closingCategories.includes(category.category)
+                        const isOpen = openCategories.includes(category.category)
+                        const isClosing = closingCategories.includes(category.category)
 
-                    return (
-                        <details
-                            className="archive__details"
-                            key={category.category}
-                            open={isOpen}
-                        >
-                            <summary
-                                className="archive__summary"
-                                onClick={e => {
-                                    e.preventDefault()
-                                    toggleCategory(category.category)
-                                }}
+                        return (
+                            <details
+                                className="archive__details"
+                                key={category.category}
+                                open={isOpen}
                             >
-                                <h2>{category.category}</h2>
+                                <summary
+                                    className="archive__summary"
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        toggleCategory(category.category)
+                                    }}
+                                >
+                                    <h2>{category.category}</h2>
 
-                                <FaChevronRight className="archive__summaryArrow" />
-                            </summary>
+                                    <FaChevronRight className="archive__summaryArrow" />
+                                </summary>
 
-                            <div
-                                className={`archive__articles ${isOpen ? "open" : ""} ${isClosing ? "closing" : ""}`}
-                                onTransitionEnd={e =>
-                                    handleTransitionEnd(e, category.category)
-                                }
-                            >
-                                <div>
-                                    {category.articles.map(article => (
-                                        <div
-                                            className="archive__articleWrapper"
-                                            key={article._id}
-                                        >
-                                            <button
-                                                className="archive__removeButton"
-                                                onClick={() => removeArticle(article._id)}
-                                                aria-label="Remove article from archive"
+                                <div
+                                    className={`archive__articles ${isOpen ? "open" : ""} ${isClosing ? "closing" : ""}`}
+                                    onTransitionEnd={e =>
+                                        handleTransitionEnd(e, category.category)
+                                    }
+                                >
+                                    <div>
+                                        {category.articles.map(article => (
+                                            <div
+                                                className="archive__articleWrapper"
+                                                key={article._id}
                                             >
-                                                <FaTrash />
-                                            </button>
+                                                <button
+                                                    className="archive__removeButton"
+                                                    onClick={() => removeArticle(article._id)}
+                                                    aria-label="Remove article from archive"
+                                                >
+                                                    <FaTrash />
+                                                </button>
 
-                                            <article
-                                                className={`news__article ${swipedArticle === article._id ? "swiped" : ""
-                                                    }`}
-                                                onTouchStart={e =>
-                                                    handleTouchStart(e, article._id)
-                                                }
-                                                onTouchEnd={e =>
-                                                    handleTouchEnd(e, article._id)
-                                                }
-                                            >
-                                                <div className="news__articleImgBox">
-                                                    <img
-                                                        src={article.multimedia?.thumbnail?.url}
-                                                        alt={article.multimedia?.credit || ""}
-                                                    />
-                                                </div>
+                                                <article
+                                                    className={`news__article ${swipedArticle === article._id ? "swiped" : ""
+                                                        }`}
+                                                    onTouchStart={e =>
+                                                        handleTouchStart(e, article._id)
+                                                    }
+                                                    onTouchEnd={e =>
+                                                        handleTouchEnd(e, article._id)
+                                                    }
+                                                >
+                                                    <div className="news__articleImgBox">
+                                                        <img
+                                                            src={article.multimedia?.thumbnail?.url}
+                                                            alt={article.multimedia?.credit || ""}
+                                                        />
+                                                    </div>
 
-                                                <div className="news__articleTextWrapper">
-                                                    <h3 className="news__articleHeader">
-                                                        {article.headline.main}
-                                                    </h3>
+                                                    <div className="news__articleTextWrapper">
+                                                        <h3 className="news__articleHeader">
+                                                            {article.headline.main}
+                                                        </h3>
 
-                                                    <p className="news__articleText">
-                                                        {article.abstract}
-                                                    </p>
-                                                </div>
-                                            </article>
-                                        </div>
-                                    ))}
+                                                        <p className="news__articleText">
+                                                            {article.abstract}
+                                                        </p>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </details>
-                    )
-                })
-            )}
+                            </details>
+                        )
+                    })
+                )}
 
-        </section>
+            </section>
+            <Links />
+        </>
     )
 }

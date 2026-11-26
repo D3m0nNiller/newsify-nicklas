@@ -295,52 +295,56 @@ body {
     }
 }
 
+
 #{$archive__} {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     margin-top: 10px;
     gap: 1em;
+    flex-direction: column;
     font-family: 'Open Sans', sans-serif;
 
     #{$archive__}header {
+        background: url(../../public/newsify_logo.svg) no-repeat;
+        background-size: contain;
+        margin: 0 auto;
+        padding-left: 45px;
         font-family: "Playfair Display", 'Open Sans', sans-serif;
-        padding-left: 15px;
-    }
-
-    #{$archive__}empty {
-        padding: 15px;
     }
 
     #{$archive__}details {
         border-top: 1px solid;
         padding-top: 10px;
 
-        &:last-of-type {
-            border-bottom: 1px solid;
-            padding-bottom: 10px;
+        #{$archive__}summary {
+            background: url(../../public/newsify_logo.svg) no-repeat;
+            background-size: contain;
+            list-style: none;
+            padding-left: 30px;
+            display: grid;
+            grid-auto-flow: column;
+            margin-left: 15px;
+
+            h2 {
+                font-family: "Playfair Display", 'Open Sans', sans-serif;
+            }
+
+            #{$archive__}summaryArrow {
+                margin: auto 15px auto auto;
+                transform: rotate(0deg);
+                transition: transform 0.3s ease-in-out;
+                display: block;
+            }
+        }
+
+        &[open] #{$archive__}summaryArrow {
+            transform: rotate(90deg);
         }
     }
 
-    #{$archive__}summary {
-        list-style: none;
-        padding-left: 15px;
-        margin-left: 15px;
-        display: grid;
-        grid-auto-flow: column;
-
-        h2 {
-            font-family: "Playfair Display", 'Open Sans', sans-serif;
-        }
-    }
-
-    #{$archive__}summaryArrow {
-        margin: auto 15px auto auto;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    details[open] #{$archive__}summaryArrow {
-        transform: rotate(90deg);
+    #{$archive__}details:last-of-type {
+        border-bottom: 1px solid;
+        padding-bottom: 10px;
     }
 
     #{$archive__}articles {
@@ -373,6 +377,7 @@ body {
             top: 0;
             bottom: 0;
             width: 75px;
+
             border: none;
             background: #dc3545;
             color: white;
@@ -384,17 +389,43 @@ body {
             display: flex;
             position: relative;
             z-index: 1;
+
             width: 100%;
             padding: 0.7em;
             padding-left: 15px;
+
             background: white;
             border: none;
+
             transition: transform 0.3s ease;
             touch-action: pan-y;
 
             &.swiped {
                 transform: translateX(-75px);
             }
+
+            .news__articleImgBox {
+                margin-right: 0.7em;
+            }
+
+            .news__articleTextWrapper {
+                flex: 1;
+                min-width: 0;
+
+                .news__articleHeader {
+                    font-family: "Playfair Display", 'Open Sans', sans-serif;
+                }
+
+                .news__articleText {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
         }
+    }
+
+    #{$archive__}empty {
+        padding: 15px;
     }
 }
