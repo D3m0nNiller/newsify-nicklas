@@ -183,5 +183,31 @@ body {
                 text-overflow: ellipsis;
             }
         }
+
+        #{$news__}saveButton {
+            border: 2px solid #2e8b57;
+            background: transparent;
+            color: #2e8b57;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            height: fit-content;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: #2e8b57;
+                color: white;
+            }
+
+            &.saved {
+                border-color: #dc3545;
+                color: #dc3545;
+
+                &:hover {
+                    background: #dc3545;
+                    color: white;
+                }
+            }
+        }
     }
 }

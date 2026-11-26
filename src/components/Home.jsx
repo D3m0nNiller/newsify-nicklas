@@ -1,5 +1,5 @@
-import { useRef, useState } from "react"
-import { FaChevronRight } from "react-icons/fa"
+import { useState, useRef, useEffect } from "react"
+import { FaChevronRight, FaCheck, FaTrash } from "react-icons/fa"
 import "./style.scss"
 import { useQuery } from "@tanstack/react-query"
 
@@ -9,11 +9,23 @@ export default function Home() {
     const [closingCategories, setClosingCategories] = useState([])
     const animationLock = useRef([])
 
+    const [savedArticles, setSavedArticles] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("savedArticles")) || []
+        } catch {
+            return []
+        }
+    })
+
     const API_key = import.meta.env.VITE_API_KEY
+
+    useEffect(() => {
+        localStorage.setItem("savedArticles", JSON.stringify(savedArticles))
+    }, [savedArticles])
 
     async function newsFetch() {
 
-        const categories = ["Editorial", "Games", "Express", "Podcasts"]
+        const categories = ["Editorial", "Games", "Express", "Podcasts", "Sports", "Climate"]
 
         const news = await Promise.all(
             categories.map(async (category) => {
@@ -56,6 +68,20 @@ export default function Home() {
 
     if (error) {
         return <p>Something wrong happened while fetching, maybe something is wrong with your internet or while fetching the data</p>
+    }
+
+    function toggleSavedArticle(article) {
+        const isSaved = savedArticles.some(
+            savedArticle => savedArticle._id === article._id
+        )
+
+        if (isSaved) {
+            setSavedArticles(prev =>
+                prev.filter(savedArticle => savedArticle._id !== article._id)
+            )
+        } else {
+            setSavedArticles(prev => [...prev, article])
+        }
     }
 
     function toggleCategory(category) {
@@ -134,13 +160,27 @@ export default function Home() {
                                         </div>
 
                                         <div className="news__articleTextWrapper">
-                                            <h3 className="news__articleHeader">
-                                                {article.headline.main}
-                                            </h3>
-                                            <p className="news__articleText">
-                                                {article.abstract}
-                                            </p>
+                                            <h3 className="news__articleHeader">{article.headline.main}</h3>
+                                            <p className="news__articleText">{article.abstract}</p>
                                         </div>
+
+                                        <button
+                                            className={`news__saveButton ${savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                                ? "saved"
+                                                : ""
+                                                }`}
+                                            onClick={() => toggleSavedArticle(article)}
+                                            aria-label={
+                                                savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                                    ? "Remove saved article"
+                                                    : "Save article"
+                                            }
+                                        >
+                                            {savedArticles.some(savedArticle => savedArticle._id === article._id)
+                                                ? <FaTrash />
+                                                : <FaCheck />
+                                            }
+                                        </button>
                                     </article>
                                 ))}
                             </div>
