@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import Authenticator from './components/Authenticator'
 import Home from './components/Home'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import Archive from './components/archive'
+
 
 function App() {
 
@@ -11,6 +13,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Authenticator />} />
           <Route path='/home' element={<Home />} />
+          <Route path='/archive' element={<Archive />} />
         </Routes>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

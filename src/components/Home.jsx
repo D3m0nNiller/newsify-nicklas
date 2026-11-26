@@ -72,7 +72,7 @@ export default function Home() {
         return <p>Something wrong happened while fetching. Maybe something is wrong with your internet or while fetching the data</p>
     }
 
-    function toggleSavedArticle(article) {
+    function toggleSavedArticle(article, category) {
         const isSaved = savedArticles.some(
             savedArticle => savedArticle._id === article._id
         )
@@ -82,7 +82,10 @@ export default function Home() {
                 prev.filter(savedArticle => savedArticle._id !== article._id)
             )
         } else {
-            setSavedArticles(prev => [...prev, article])
+            setSavedArticles(prev => [
+                ...prev,
+                { ...article, savedCategory: category }
+            ])
         }
     }
 
@@ -203,7 +206,7 @@ export default function Home() {
                                                     ? "saved"
                                                     : ""
                                                     }`}
-                                                onClick={() => toggleSavedArticle(article)}
+                                                onClick={() => toggleSavedArticle(article, category.category)}
                                                 aria-label={
                                                     savedArticles.some(saved => saved._id === article._id)
                                                         ? "Remove saved article"
